@@ -27,4 +27,12 @@ public abstract class Hand {
         for(int i=0; i<myHand.size(); i++)
         System.out.println(myHand.get(i));
     }
+
+    public boolean checkIfCardExist(int number){
+        return number - 1 < myHand.size();
+    }
+
+    public Card getCard(int number) {
+        return myHand.remove(number - 1);
+    }
 }

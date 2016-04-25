@@ -24,9 +24,13 @@ public class Deck {
         return name;
     }
 
+    public int amountCardsInDeck(){
+        return myCollection.size();
+    }
+
 
     public void populateDeck(Card card){
-        this.myCollection.push(card);
+        myCollection.push(card);
     }
 
     public void shuffle(){

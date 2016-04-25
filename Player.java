@@ -4,16 +4,17 @@ package com.company;
  * Created by vassili.holenev on 8.04.2016.
  */
 public class Player extends Hand{
-    String playerName;
+    String player;
     int playerHealth;
 
     public Player(String hand, int numberOfCards, String playerName) {
-        super(hand, numberOfCards);
-        this.playerName = playerName;
+        super(hand);
+        player = playerName;
+        playerHealth = 10;
     }
 
     public String getPlayerName() {
-        return playerName;
+        return player;
     }
 
     @Override
@@ -23,8 +24,15 @@ public class Player extends Hand{
 
     @Override
     public void checkCards() {
-        System.out.println("Player " + playerName + " have");
+        System.out.println("Player " + player + " have");
         super.checkCards();
 
+    }
+
+    public int modifyHealth(int number){
+        if(playerHealth > 0 && number < playerHealth){
+            playerHealth -= number;
+        }
+        return playerHealth;
     }
 }

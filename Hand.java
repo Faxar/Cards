@@ -5,15 +5,15 @@ import java.util.ArrayList;
 /**
  * Created by vassili.holenev on 7.04.2016.
  */
-public abstract class Hand {
+public class Hand {
 
     private String hand;
     private int numberOfCards;
     private ArrayList<Card> myHand;
 
-    public Hand(String hand, int numberOfCards) {
+    public Hand(String hand) {
         this.hand = hand;
-        this.numberOfCards = numberOfCards;
+        this.numberOfCards = 3;
         this.myHand = new ArrayList<>();
     }
 
@@ -27,4 +27,22 @@ public abstract class Hand {
         for(int i=0; i<myHand.size(); i++)
         System.out.println(myHand.get(i));
     }
+
+
+    public Card getCard(int number){
+        return myHand.remove(number - 1);
+    }
+
+    public boolean checkIfCardExist(int number){
+        return number - 1 < myHand.size();
+    }
+
+    public int checkAmountOfCards(){
+        return myHand.size();
+    }
+
+    public void endTurnCardDrow(Card card){
+        myHand.add(card);
+    }
+
 }

@@ -7,14 +7,16 @@ import java.util.ArrayList;
  */
 public class Hand {
 
-    private String hand;
+    public String hand;
     private int numberOfCards;
     private ArrayList<Card> myHand;
+    private int playerHealth;
 
     public Hand(String hand) {
         this.hand = hand;
         this.numberOfCards = 3;
         this.myHand = new ArrayList<>();
+        this.playerHealth = 10;
     }
 
     public void populateHand(Deck deck){
@@ -43,6 +45,18 @@ public class Hand {
 
     public void endTurnCardDrow(Card card){
         myHand.add(card);
+    }
+
+    public int checkPlayerHealth(){
+        return playerHealth;
+    }
+
+    public void addPlayerHealth(int number){
+        playerHealth += number;
+    }
+
+    public void removePlayerHealth(int number){
+        playerHealth -= number;
     }
 
 }

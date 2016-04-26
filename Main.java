@@ -1,15 +1,18 @@
 package com.company;
 
-import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
-    static boolean endGame;
+
 
 
     public static void main(String[] args) {
+
+        int number;
+        boolean endGame = false;
+
 
         Card card1 = new Card(1, "Scout", 1, 1, 1);
         Card card2 = new Card(2, "Space Marine", 1, 1, 1);
@@ -32,12 +35,15 @@ public class Main {
         newHand.populateHand(newDeck);
 
         Scanner newScanner = new Scanner(System.in);
-        int number;
+
         Card tempCard;
 
         startGame();
         printMenu();
-        endGame = false;
+
+        System.out.println("You have following cards in your hand : ");
+        newHand.checkCards();
+
         while (!endGame) {
             try {
                 number = newScanner.nextInt();
@@ -48,55 +54,70 @@ public class Main {
 
 
 
-            switch (number){
+            switch (number) {
+
                 case 1:
                     System.out.println("Enter card number");
                     newHand.checkCards();
                     number = newScanner.nextInt();
-                    if(number < 0){
+                    if (number < 0) {
                         System.out.println("Please enter positive number");
-                    } else if (newHand.checkIfCardExist(number)){
+                    } else if (newHand.checkIfCardExist(number)) {
                         tempCard = newHand.getCard(number);
-                        newField.putCardOnF(tempCard,1);
+                        newField.putCardOnF(tempCard, 1);
                         System.out.println("Now on the field there is:");
                         newField.returnFieldCards();
+                        printMenu();
                     }
-                    printMenu();
                     break;
 
                 case 2:
-                    if(newHand.checkAmountOfCards() > 3 && newDeck.amountCardsInDeck() > 0){
+                    if (newHand.checkAmountOfCards() >= 3 && newDeck.amountCardsInDeck() > 0) {
                         Card burned = newDeck.fetch();
-                        System.out.println("You have full hand. Card\n" + burned  + '\n' + " have burned down");
-                    } else if (newHand.checkAmountOfCards() < 3 && newDeck.amountCardsInDeck() > 0){
+                        System.out.println("You have full hand. Card\n" + burned + '\n' + " have burned down");
+                        System.out.println("You have " + newDeck.amountCardsInDeck() + " cards, left in your deck");
+                        printMenu();
+                    } else if (newHand.checkAmountOfCards() < 3 && newDeck.amountCardsInDeck() > 0) {
                         Card pullFromDeck = newDeck.fetch();
                         newHand.endTurnCardDrow(pullFromDeck);
+                        System.out.println("You have pulled " + pullFromDeck + " card");
+                        printMenu();
                     } else {
+                        System.out.println(newDeck.amountCardsInDeck());
                         System.out.println("You are suffering fatigue death and you have lost 5 Health");
-                        System.out.println("Your current health is " + );
+                        System.out.println("Your current health is " + newHand.checkPlayerHealth());
+                        newHand.removePlayerHealth(5);
+                        System.out.println("Your new health number is " + newHand.checkPlayerHealth());
+                        if (newHand.checkPlayerHealth() <= 0) {
+                            System.out.println("You Dead! MuaHaHaHa!");
+                            endGame = true;
+                        } else {
+                            printMenu();
+                            break;
+                        }
                     }
+                case 3:
+                    System.out.println("Weakling!");
+                    endGame = true;
             }
 
 
         }
 
 
-
-
     }
 
-    private static void startGame(){
+    private static void startGame() {
 
 
         System.out.println("Let's the Games begin!");
     }
 
-    private static void printMenu(){
+    private static void printMenu() {
         System.out.println("Please press action\n" +
-                            "Press 1 - Play Card\n" +
-                            "Press 2 - End Turn\n" +
-                            "Press 3 - Skip Turn\n" +
-                            "Press 4 - Surrender\n");
+                "Press 1 - Play Card\n" +
+                "Press 2 - End Turn\n" +
+                "Press 4 - Surrender\n");
     }
 
 }

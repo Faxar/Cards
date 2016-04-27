@@ -1,7 +1,9 @@
 package com.company;
 
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -9,25 +11,36 @@ public class Main {
     public static void main(String[] args) {
 
         int number;
+        int turn = 1;
 
+        BufferedReader br;
+        String line;
+        String[] cardData;
+        String fileName = "cards.csv";
+        Card card;
 
-
-        Card card1 = new Card(1, "Scout", 1, 1, 1);
-        Card card2 = new Card(2, "Space Marine", 1, 1, 1);
-        Card card3 = new Card(3, "Inquisitor", 1, 1, 1);
-        Card card4 = new Card(4, "Chaplain", 1, 1, 1);
-        Card card5 = new Card(5, "Terminator", 1, 1, 1);
-        Card card6 = new Card(6, "Dreadnought", 8, 8, 8);
-        Card card7 = new Card(7, "Primarch", 10, 10, 10);
         Deck newDeck = new Deck("Player1");
         Field newField = new Field();
-        newDeck.populateDeck(card1);
-        newDeck.populateDeck(card2);
-        newDeck.populateDeck(card3);
-        newDeck.populateDeck(card4);
-        newDeck.populateDeck(card5);
-        newDeck.populateDeck(card6);
-        newDeck.populateDeck(card7);
+
+        try {
+            br = new BufferedReader(new FileReader(fileName));
+            while ((line = br.readLine()) != null) {
+                cardData = line.split(",");
+                card = new Card(
+                        Integer.parseInt(cardData[0].trim()),
+                        cardData[1],
+                        Integer.parseInt(cardData[2].trim()),
+                        Integer.parseInt(cardData[3].trim()),
+                        Integer.parseInt(cardData[4].trim())
+                );
+                newDeck.populateDeck(card);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         newDeck.shuffle();   //Shuffle your hand
         Hand newHand = new Hand("myHand");
         newHand.populateHand(newDeck);
@@ -37,20 +50,21 @@ public class Main {
         Card tempCard;
 
         startGame();
-        printMenu();
 
         System.out.println("You have following cards in your hand : ");
         newHand.checkCards();
         boolean endGame = false;
         while (!endGame) {
+
+            System.out.println("Turn " + turn);
+            printMenu();
+
             try {
                 number = newScanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Please enter correct number");
                 continue;
             }
-
-
 
             switch (number) {
 
@@ -65,7 +79,6 @@ public class Main {
                         newField.putCardOnF(tempCard, 1);
                         System.out.println("Now on the field there is:");
                         newField.returnFieldCards();
-                        printMenu();
                     }
                     break;
 
@@ -74,14 +87,10 @@ public class Main {
                         Card burned = newDeck.fetch();
                         System.out.println("You have full hand.\n" + burned + '\n' + " have burned down");
                         System.out.println("You have " + newDeck.amountCardsInDeck() + " cards, left in your deck");
-                        printMenu();
-                        break;
                     } else if (newHand.checkAmountOfCards() < 3 && newDeck.amountCardsInDeck() > 0) {
                         Card pullFromDeck = newDeck.fetch();
                         newHand.endTurnCardDrow(pullFromDeck);
                         System.out.println("You have pulled " + pullFromDeck + " card");
-                        printMenu();
-                        break;
                     } else {
                         System.out.println("You have " + newDeck.amountCardsInDeck() + " cards, left in your deck");
                         System.out.println("Your current health is " + newHand.checkPlayerHealth());
@@ -92,11 +101,11 @@ public class Main {
                             System.out.println("You Dead! MuaHaHaHa!");
                             endGame = true;
                             break;
-                        } else {
-                            printMenu();
-                            break;
                         }
                     }
+                    turn++;
+                    newField.clearFatigue(1);
+                    break;
 
                 case 3:
                     System.out.println("Weakling!");
@@ -116,9 +125,9 @@ public class Main {
 
     private static void printMenu() {
         System.out.println("Please press action\n" +
-                "Press 1 - Play Card\n" +
+                "Press 1 - Play Card from the hand\n" +
                 "Press 2 - End Turn\n" +
-                "Press 4 - Surrender\n");
+                "Press 3 - Surrender\n");
     }
 
 }

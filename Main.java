@@ -6,12 +6,10 @@ import java.util.Scanner;
 public class Main {
 
 
-
-
     public static void main(String[] args) {
 
         int number;
-        boolean endGame = false;
+
 
 
         Card card1 = new Card(1, "Scout", 1, 1, 1);
@@ -43,7 +41,7 @@ public class Main {
 
         System.out.println("You have following cards in your hand : ");
         newHand.checkCards();
-
+        boolean endGame = false;
         while (!endGame) {
             try {
                 number = newScanner.nextInt();
@@ -74,31 +72,36 @@ public class Main {
                 case 2:
                     if (newHand.checkAmountOfCards() >= 3 && newDeck.amountCardsInDeck() > 0) {
                         Card burned = newDeck.fetch();
-                        System.out.println("You have full hand. Card\n" + burned + '\n' + " have burned down");
+                        System.out.println("You have full hand.\n" + burned + '\n' + " have burned down");
                         System.out.println("You have " + newDeck.amountCardsInDeck() + " cards, left in your deck");
                         printMenu();
+                        break;
                     } else if (newHand.checkAmountOfCards() < 3 && newDeck.amountCardsInDeck() > 0) {
                         Card pullFromDeck = newDeck.fetch();
                         newHand.endTurnCardDrow(pullFromDeck);
                         System.out.println("You have pulled " + pullFromDeck + " card");
                         printMenu();
+                        break;
                     } else {
-                        System.out.println(newDeck.amountCardsInDeck());
-                        System.out.println("You are suffering fatigue death and you have lost 5 Health");
+                        System.out.println("You have " + newDeck.amountCardsInDeck() + " cards, left in your deck");
                         System.out.println("Your current health is " + newHand.checkPlayerHealth());
                         newHand.removePlayerHealth(5);
+                        System.out.println("You are suffering fatigue death and you have lost 5 Health");
                         System.out.println("Your new health number is " + newHand.checkPlayerHealth());
                         if (newHand.checkPlayerHealth() <= 0) {
                             System.out.println("You Dead! MuaHaHaHa!");
                             endGame = true;
+                            break;
                         } else {
                             printMenu();
                             break;
                         }
                     }
+
                 case 3:
                     System.out.println("Weakling!");
                     endGame = true;
+                    break;
             }
 
 
@@ -108,8 +111,6 @@ public class Main {
     }
 
     private static void startGame() {
-
-
         System.out.println("Let's the Games begin!");
     }
 

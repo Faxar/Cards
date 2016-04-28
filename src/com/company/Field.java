@@ -9,33 +9,48 @@ import java.util.List;
 public class Field {
     private ArrayList<Card> fieldCards1;
     private ArrayList<Card> fieldCards2;
+
+    private ArrayList<Card> fatigueCards1;
+    private ArrayList<Card> fatigueCards2;
+
     private int maxLenght = 3;
 
     public Field() {
         this.fieldCards1 = new ArrayList<>();
         this.fieldCards2 = new ArrayList<>();
+        this.fatigueCards1 = new ArrayList<>();
+        this.fatigueCards2 = new ArrayList<>();
     }
 
     public boolean putCardOnF(Card card, int sideNumber){
         if(sideNumber == 1){
-            return put(card, fieldCards1);
+            return put(card, fieldCards1, fatigueCards1);
             } else {
-            return put(card, fieldCards2);
+            return put(card, fieldCards2, fatigueCards2);
         }
     }
 
-    private boolean put(Card card, ArrayList<Card> fieldCards){
+    private boolean put(Card card, ArrayList<Card> fieldCards, ArrayList<Card> fatigueCards){
         int fieldSize = fieldCards.size();
         if(fieldSize >= maxLenght){
             return false;
         }
         fieldCards.add(card);
+        fatigueCards.add(card);
         return true;
     }
 
     public void returnFieldCards(){
         for(int i=0; i<fieldCards1.size(); i++){
             System.out.println(fieldCards1.get(i));
+        }
+    }
+
+    public void clearFatigue(int sideNumber) {
+        if(sideNumber == 1){
+            fatigueCards1.clear();
+        } else {
+            fatigueCards2.clear();
         }
     }
 
